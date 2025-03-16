@@ -7,7 +7,8 @@ from datetime import datetime
 
 def stats(request):
     counter, created = Counter.objects.get_or_create(id=1)
-    return HttpResponse(f"Всего приветствий было: {counter.count}.")
+    return render(request, 'myapp/index_stats.html', {'counter': counter})
+
 
 
 def hello(request, name):
@@ -21,10 +22,11 @@ def hello(request, name):
     gretting.greeting = str(last_greeting.timestamp)
     gretting.save()
 
-    return HttpResponse(f"Hello, {name}!")
+    return render(request, 'myapp/index.html', {'name': name})
 
 
 def grettings(request, name):
-    gretting, created = Greeting.objects.get_or_create(name=name)
+    greetings = Greeting.objects.filter(name=name)
+    return render(request, 'myapp/index_stats_name.html', {'greetings': greetings, 'name': name})
 
     return HttpResponse(f"Hello, {name}! Last greeting was at {gretting.greeting}")
